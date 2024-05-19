@@ -7,8 +7,11 @@ import { AppService } from './app.service';
 import { User } from './auth/entities/user.entity';
 import { UserProfile } from './auth/entities/user-profile.entity';
 import { Role } from './auth/entities/role.entity';
+import { Company } from './auth/entities/company.entity';
+import { Conversation } from './auth/entities/conversation.entity';
 import { ChatModule } from './chat/chat.module';
-import { Device } from './chat/entities/device.entity'; // Import Device entity
+import { Device } from './chat/entities/device.entity';
+import { Solution } from './chat/entities/solution.entity';
 
 @Module({
   imports: [
@@ -22,11 +25,12 @@ import { Device } from './chat/entities/device.entity'; // Import Device entity
       username: 'superman admin',
       password: 'password',
       database: 'superman',
-      entities: [User, UserProfile, Role, Device], // Add Device entity here
+      entities: [User, UserProfile, Role, Company, Conversation, Device, Solution],
       synchronize: true,
+      dropSchema: true, // Automatically drop the schema and recreate it
     }),
     AuthModule,
-    ChatModule, // Ensure ChatModule is imported here
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [AppService],

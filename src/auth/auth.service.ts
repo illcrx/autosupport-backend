@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { AuthDto } from './dto/auth.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
 import { Role } from './entities/role.entity';
 import { Blacklist } from './blacklist.entity';
@@ -23,7 +24,6 @@ export class AuthService {
   async validateUser(username: string, pass: string): Promise<any> {
     const user = await this.usersRepository.findOne({ where: { username } });
     if (user && (await bcrypt.compare(pass, user.password))) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, ...result } = user;
       return result;
     }
@@ -41,26 +41,29 @@ export class AuthService {
     };
   }
 
-  async register(authDto: AuthDto) {
+  async register(createUserDto: CreateUserDto) {
+    const { username, password, email } = createUserDto;
+  
     const existingUser = await this.usersRepository.findOne({
-      where: { username: authDto.username },
+      where: { username },
     });
     if (existingUser) {
       throw new UnauthorizedException('User already exists');
     }
-
+  
     const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(authDto.password, salt);
-
+    const hashedPassword = await bcrypt.hash(password, salt);
+  
     const role = await this.rolesRepository.findOne({ where: { name: 'user' } });
-
+  
     if (!role) {
       throw new UnauthorizedException('Default role not found');
     }
-
+  
     const newUser = this.usersRepository.create({
-      username: authDto.username,
+      username,
       password: hashedPassword,
+      email,
       role,
     });
     await this.usersRepository.save(newUser);
@@ -68,7 +71,6 @@ export class AuthService {
   }
 
   async logout(token: string): Promise<void> {
-    // Add the token to the blacklist
     const blacklist = new Blacklist();
     blacklist.token = token;
     await this.blacklistRepository.save(blacklist);

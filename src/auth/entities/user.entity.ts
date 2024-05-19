@@ -1,6 +1,8 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { UserProfile } from './user-profile.entity';
 import { Role } from './role.entity';
+import { Company } from './company.entity';
+import { Conversation } from './conversation.entity';
 
 @Entity()
 export class User {
@@ -13,9 +15,24 @@ export class User {
   @Column()
   password: string;
 
-  @OneToMany(() => UserProfile, userProfile => userProfile.user)
+  @Column({ unique: true })
+  email: string;
+
+  @ManyToOne(() => Role, role => role.users, { nullable: true })
+  role: Role;
+
+  @ManyToOne(() => Company, company => company.users, { nullable: true })
+  company: Company;
+
+  @OneToMany(() => UserProfile, userProfile => userProfile.user, { nullable: true })
   profiles: UserProfile[];
 
-  @ManyToOne(() => Role, role => role.users)
-  role: Role;
+  @OneToMany(() => Conversation, conversation => conversation.user, { nullable: true })
+  conversations: Conversation[];
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

@@ -27,7 +27,7 @@ export class ChatService {
       this.httpService.post(
         'https://api.openai.com/v1/chat/completions',
         {
-          model: 'gpt-4',
+          model: 'gpt-4o',
           messages: [{ role: 'user', content: modifiedMessage }],
           max_tokens: 150,
         },

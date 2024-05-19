@@ -1,19 +1,25 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-import { Solution } from './solution.entity';
+import { User } from './user.entity';
 
 @Entity()
-export class Device {
+export class Company {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
   name: string;
 
-  @Column()
-  details: string;
+  @Column({ nullable: true })
+  address: string;
 
-  @OneToMany(() => Solution, solution => solution.device)
-  solutions: Solution[];
+  @Column({ nullable: true })
+  phone: string;
+
+  @Column({ nullable: true })
+  paymentDetails: string;
+
+  @OneToMany(() => User, user => user.company)
+  users: User[];
 
   @CreateDateColumn()
   createdAt: Date;

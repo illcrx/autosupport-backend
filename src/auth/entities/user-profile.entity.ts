@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { User } from './user.entity';
 
 @Entity()
@@ -12,9 +12,21 @@ export class UserProfile {
   @Column()
   lastName: string;
 
-  @Column()
+  @Column({ nullable: true })
   age: number;
+
+  @Column({ nullable: true })
+  address: string;
+
+  @Column({ nullable: true })
+  phoneNumber: string;
 
   @ManyToOne(() => User, user => user.profiles)
   user: User;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }
