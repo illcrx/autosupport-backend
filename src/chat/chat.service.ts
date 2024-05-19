@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { HttpService } from '@nestjs/axios'; // Updated import
+import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
-import { lastValueFrom } from 'rxjs'; // Import this utility to convert Observables to Promises
+import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class ChatService {
@@ -14,9 +14,10 @@ export class ChatService {
     const apiKey = this.configService.get<string>('CHAT_API_KEY');
     const response = await lastValueFrom(
       this.httpService.post(
-        'https://api.openai.com/v1/engines/davinci-codex/completions',
+        'https://api.openai.com/v1/chat/completions', // Updated endpoint
         {
-          prompt: message,
+          model: 'gpt-4', // Specify the model
+          messages: [{ role: 'user', content: message }],
           max_tokens: 150,
         },
         {
@@ -26,6 +27,6 @@ export class ChatService {
         },
       ),
     );
-    return response.data;
+    return response.data.choices[0].message.content; // Return the chat message content
   }
 }

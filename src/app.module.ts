@@ -7,6 +7,7 @@ import { AppService } from './app.service';
 import { User } from './auth/entities/user.entity';
 import { UserProfile } from './auth/entities/user-profile.entity';
 import { Role } from './auth/entities/role.entity';
+import { ChatModule } from './chat/chat.module'; // Ensure this import is here
 
 @Module({
   imports: [
@@ -17,13 +18,14 @@ import { Role } from './auth/entities/role.entity';
       type: 'postgres',
       host: 'localhost',
       port: 5432,
-      username: 'superman admin', // your new DB user
-      password: 'password', // the password you set for the user
-      database: 'superman', // the name of your new database
+      username: 'superman admin',
+      password: 'password',
+      database: 'superman',
       entities: [User, UserProfile, Role],
-      synchronize: true, // set to false in production
+      synchronize: true,
     }),
     AuthModule,
+    ChatModule, // Add ChatModule to the imports array
   ],
   controllers: [AppController],
   providers: [AppService],
