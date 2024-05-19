@@ -10,10 +10,11 @@ import { JwtStrategy } from './jwt.strategy';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { RoleService } from './role.service';
 import { RoleController } from './role.controller';
+import { Blacklist } from './blacklist.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, UserProfile, Role]),
+    TypeOrmModule.forFeature([User, UserProfile, Role, Blacklist]),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({

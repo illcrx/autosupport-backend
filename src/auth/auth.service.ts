@@ -6,6 +6,7 @@ import * as bcrypt from 'bcrypt';
 import { AuthDto } from './dto/auth.dto';
 import { User } from './entities/user.entity';
 import { Role } from './entities/role.entity';
+import { Blacklist } from './blacklist.entity';
 
 @Injectable()
 export class AuthService {
@@ -14,6 +15,8 @@ export class AuthService {
     private usersRepository: Repository<User>,
     @InjectRepository(Role)
     private rolesRepository: Repository<Role>,
+    @InjectRepository(Blacklist)
+    private blacklistRepository: Repository<Blacklist>,
     private readonly jwtService: JwtService,
   ) {}
 
@@ -62,6 +65,13 @@ export class AuthService {
     });
     await this.usersRepository.save(newUser);
     return newUser;
+  }
+
+  async logout(token: string): Promise<void> {
+    // Add the token to the blacklist
+    const blacklist = new Blacklist();
+    blacklist.token = token;
+    await this.blacklistRepository.save(blacklist);
   }
 
   async getProfile(userId: number): Promise<User> {
