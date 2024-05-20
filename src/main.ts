@@ -5,6 +5,8 @@ import { bootstrap as seedDatabase } from './seeds/seed-database';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  
+  // Apply global validation pipe
   app.useGlobalPipes(new ValidationPipe());
 
   // Enable CORS
@@ -14,8 +16,11 @@ async function bootstrap() {
     credentials: true,
   });
 
+  // Start listening on port 3000
   await app.listen(3000);
 
+  // Seed the database
   await seedDatabase();
 }
+
 bootstrap();

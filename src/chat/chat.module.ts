@@ -20,4 +20,3 @@ import { Query } from './entities/query.entity'; // Import Query entity
   controllers: [ChatController],
 })
 export class ChatModule {}
- 
