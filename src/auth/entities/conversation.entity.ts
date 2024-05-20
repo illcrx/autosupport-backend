@@ -12,6 +12,9 @@ export class Conversation {
   @Column('text')
   fullConversation: string;
 
+  @Column()
+  content: string;
+
   @ManyToOne(() => User, user => user.conversations)
   user: User;
 

@@ -19,7 +19,15 @@ export class AuthService {
     @InjectRepository(Blacklist)
     private blacklistRepository: Repository<Blacklist>,
     private readonly jwtService: JwtService,
-  ) {}
+  ) {
+    {
+      console.log('AuthService constructor called');
+      console.log('User repository:', this.usersRepository);
+      console.log('Role repository:', this.rolesRepository);
+      console.log('Blacklist repository:', this.blacklistRepository);
+      console.log('JwtService:', this.jwtService);
+    }
+  }
 
   async validateUser(username: string, pass: string): Promise<any> {
     const user = await this.usersRepository.findOne({ where: { username } });

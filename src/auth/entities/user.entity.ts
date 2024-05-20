@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, OneToOne } from 'typeorm';
 import { UserProfile } from './user-profile.entity';
 import { Role } from './role.entity';
 import { Company } from './company.entity';
@@ -9,30 +9,27 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true })
+  @Column()
   username: string;
 
   @Column()
   password: string;
 
-  @Column({ unique: true })
+  @Column()
   email: string;
 
-  @ManyToOne(() => Role, role => role.users, { nullable: true })
+  @ManyToOne(() => Role, role => role.users)
   role: Role;
 
-  @ManyToOne(() => Company, company => company.users, { nullable: true })
+  @ManyToOne(() => Company, company => company.users)
   company: Company;
 
-  @OneToMany(() => UserProfile, userProfile => userProfile.user, { nullable: true })
-  profiles: UserProfile[];
+  @OneToOne(() => UserProfile, userProfile => userProfile.user)
+  userProfile: UserProfile;
 
-  @OneToMany(() => Conversation, conversation => conversation.user, { nullable: true })
+  @OneToMany(() => Conversation, conversation => conversation.user)
   conversations: Conversation[];
 
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
+  @OneToMany(() => UserProfile, userProfile => userProfile.user) // Add this line
+  profiles: UserProfile[]; // Add this line
 }

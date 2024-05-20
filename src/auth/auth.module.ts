@@ -11,6 +11,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { RoleService } from './role.service';
 import { RoleController } from './role.controller';
 import { Blacklist } from './blacklist.entity';
+import { UserService } from './user.service';
+import { UserController } from './user.controller'; // Add this import
+import { SessionService } from './session.service'; // Add this import
 
 @Module({
   imports: [
@@ -25,7 +28,14 @@ import { Blacklist } from './blacklist.entity';
     }),
     ConfigModule,
   ],
-  providers: [AuthService, JwtStrategy, RoleService],
-  controllers: [AuthController, RoleController],
+  providers: [
+    AuthService,
+    JwtStrategy,
+    RoleService,
+    UserService,
+    SessionService,
+  ],
+  controllers: [AuthController, RoleController, UserController],  // Add UserController here
+  exports: [AuthService],
 })
 export class AuthModule {}

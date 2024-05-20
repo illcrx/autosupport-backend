@@ -5,6 +5,8 @@ import { Company } from '../auth/entities/company.entity';
 import { User } from '../auth/entities/user.entity';
 import { UserProfile } from '../auth/entities/user-profile.entity';
 import { Solution } from '../chat/entities/solution.entity';
+import { Session } from '../chat/entities/session.entity'; // Import Session entity
+import { Query } from '../chat/entities/query.entity'; // Import Query entity
 
 async function bootstrap() {
   await AppDataSource.initialize();
@@ -83,6 +85,29 @@ async function bootstrap() {
       solution.device = device;
       await solutionRepository.save(solution);
       console.log(`Solution for ${deviceData.name} saved`);
+    }
+  }
+
+  // Seed sessions and queries
+  const sessionRepository = AppDataSource.getRepository(Session);
+  const queryRepository = AppDataSource.getRepository(Query);
+  const sessions = [
+    { title: 'Session 1', queries: [{ content: 'Query1', response: 'Response1' }, { content: 'Query2', response: 'Response2' }] },
+    { title: 'Session 2', queries: [{ content: 'Query3', response: 'Response3' }] }
+  ];
+  for (const sessionData of sessions) {
+    const session = new Session();
+    session.title = sessionData.title;
+    await sessionRepository.save(session);
+    console.log(`Session ${sessionData.title} saved`);
+
+    for (const queryData of sessionData.queries) {
+      const query = new Query();
+      query.content = queryData.content;
+      query.response = queryData.response;
+      query.session = session;
+      await queryRepository.save(query);
+      console.log(`Query for ${sessionData.title} saved`);
     }
   }
 
