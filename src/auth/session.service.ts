@@ -7,6 +7,8 @@ export class SessionService {
 
   createSession() {
     const sessionId = uuidv4();
+    console.log("This is in the createSession function")
+    console.log('sessionId', sessionId);
     this.sessions.set(sessionId, { context: [] });
     return sessionId;
   }

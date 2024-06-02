@@ -12,6 +12,7 @@ export class AuthController {
 
   @Post('login')
   async login(@Body() authDto: AuthDto) {
+    console.log('authDto', authDto);
     return this.authService.login(authDto);
   }
 

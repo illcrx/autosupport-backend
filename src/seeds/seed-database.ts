@@ -7,6 +7,7 @@ import { UserProfile } from '../auth/entities/user-profile.entity';
 import { Solution } from '../chat/entities/solution.entity';
 import { Session } from '../chat/entities/session.entity'; // Import Session entity
 import { Query } from '../chat/entities/query.entity'; // Import Query entity
+const bcrypt = require('bcrypt');
 
 async function bootstrap() {
   await AppDataSource.initialize();
@@ -41,8 +42,10 @@ async function bootstrap() {
   // Seed users
   const userRepository = AppDataSource.getRepository(User);
   const userProfileRepository = AppDataSource.getRepository(UserProfile);
+  const adminPasswordnothashed = 'password';
+  const hashedPassword = await bcrypt.hash(adminPasswordnothashed, 10);
   const users = [
-    { username: 'admin', password: 'adminpass', email: 'admin@example.com', role: 'admin', company: 'Example Company 1', firstName: 'Admin', lastName: 'User' },
+    { username: 'admin', password: hashedPassword, email: 'admin@example.com', role: 'admin', company: 'Example Company 1', firstName: 'Admin', lastName: 'User' },
   ];
   for (const userData of users) {
     const role = await roleRepository.findOneBy({ name: userData.role });
